@@ -1,0 +1,74 @@
+%macros
+%names
+\newcommand{\demorgan}{De-Morgan\ }
+\newcommand{\hastad}{H\aa stad}
+
+
+%functions%
+\newcommand{\sym}{\mathrm{SYM}}
+\newcommand{\thr}{\mathrm{LTF}}
+\newcommand{\maj}{\mathrm{MAJ}}
+\newcommand{\IN}{\mathrm{IN}}
+\newcommand{\AND}{\mathrm{AND}}
+\newcommand{\OR}{\mathrm{OR}}
+\newcommand{\MOD}{\mathrm{MOD}}
+\newcommand{\xor}{\oplus}
+
+%shortcuts%
+\newcommand{\inner}[2]{\left\langle #1,#2 \right\rangle}
+\newcommand{\setcond}[2]{\left\{#1\: \middle|\: #2\right\}}
+\newcommand{\abs}[1]{\left| #1 \right|}
+
+%probability
+\newcommand{\prob}[2]{\Pr_{#1}\left[#2\right]}
+\newcommand{\E}[2]{\mathbb{E}_{#1}\left[#2\right]}
+\newcommand{\Ex}[2]{\underset{#1}{\mathbb{E}} \left[ #2 \right]}
+
+
+%boolean functions and cubes
+\newcommand{\cube}[1]{\{0,1\}^{#1}}
+\newcommand{\fcube}[1]{\{-1,1\}^{#1}}
+\newcommand{\bool}[1]{\cube{#1} \rightarrow \cube{}}
+\newcommand{\fbool}[1]{\fcube{#1} \rightarrow \fcube{}}
+
+%Brackets%
+\newcommand{\bra}[1]{\left\{#1\right\}}
+\newcommand{\sbra}[1]{\left[#1\right]}
+\newcommand{\abra}[1]{\left\langle#1\right\rangle}
+\newcommand{\cbra}[1]{\left(#1\right)}
+
+%Symbols%
+\newcommand{\IF}{\mathrm{if}}
+\newcommand{\F}{\mathbb{F}}
+\newcommand{\p}{\mathcal{P}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\R}{\mathbb{R}}
+
+%asymptotic notation
+\newcommand{\bigo}[1]{O\left(#1\right)}
+\newcommand{\smallo}[1]{o\left(#1\right)}
+
+\newcommand{\ie}{i.e.}
+
+%%environments
+%\theoremstyle{plain}
+\newtheorem{theorem}{Theorem}
+%\newtheorem*{theorem*}{Theorem}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+%\newtheorem*{lemma*}{Lemma}
+\newtheorem{observation}[theorem]{Observation}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{claim}[theorem]{Claim}
+%\newtheorem*{claim*}{Claim}
+\newtheorem{fact}[theorem]{Fact}
+\newtheorem{assumption}[theorem]{Assumption}
+\newtheorem{remark}[theorem]{Remark}
+\newtheorem{conjecture}{Conjecture}
+%\newtheorem*{conjecture*}{Conjecture}
+\newtheorem{question}{Question}
+%\newtheorem*{question*}{Question}
+%\newtheorem*{answer*}{Answer}
+%%commands%
+
