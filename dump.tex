@@ -1,0 +1,104 @@
+%%%%%%%%%%%%%%%%%%%OLD LEMMA STATEMENT%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    % \begin{lemma}
+    %     \label{lem:structural lemma}
+    %     Let $F$ be a monotone De Morgan formula and $\rho$ be a restriction. Let $s$ be a natural number and $a \in \cube{s}$. If $\cdt(F,\rho)$ has a path of length $s$, given by the assignement $a$, there exist
+        
+    %     \begin{itemize}
+    % %        \item [(i)] $s$ variables $\xvars$,
+    %         \item [(i)] $s$ root to leaf paths $p_1,\ldots , p_s$ in the formula tree of $F$ whose leaves are labelled by $\xvars$ respectively, %give a proof 
+    %         \item [(ii)] an assignment $b \in \cube{s}$, 
+    %         %and a graft certificate pair $\alpha,\beta$ such that
+    %          %   $$\alpha = \abra{x_{i_1} \to b_1, \ldots , x_{i_s} \to b_s}$$
+    %           %  $$\beta = \abra{x_{i_1} \to \bar{b_1}, \ldots , x_{i_s} \to \bar{b_s}}$$
+    %     \end{itemize}
+    %     such that  
+    %     \begin{itemize}
+    %         \item $p_i$ is to the left of $p_j$ in the formula tree iff $i < j$.
+    % %        \item $x_{i_k}$ is at the leaf of path $p_k$ for all $k \in [s]$.
+    %         \item For all $k \in [s]$, let $\alpha_k, \beta_k$ be ordered restriction such that
+    %             $$\alpha_k = \abra{x_{i_1} \to a_1, \ldots x_{i_{k-1}} \to a_{k-1}, x_{i_k} \to b_k , \ldots x_{i_s} \to b_s },$$
+    %             $$\beta_k = \abra{x_{i_1} \to a_1, \ldots x_{i_{k-1}} \to a_{k-1}, x_{i_k} \to \bar{b_k} , \ldots x_{i_s} \to \bar{b_s} }.$$ 
+    %             For all $k \in [s]$, for all nodes $v$ in $p_k$, $F_v|_{\rho \circ \alpha_k} \equiv 0$ and $F_v|_{\rho \circ \beta_k} \equiv 1$.
+    %     \end{itemize}
+        
+    % \end{lemma}
+    
+%%%%%%%%%%%%%%%%%%%%%%%OLD LEMMA STATEMENT%%%%%%%%%%%%%%%%%%%%%%%%    
+
+% \begin{proof}
+%     The proof is by induction on $s$ and the size of the formula.\\
+    
+%     \textbf{Base case:}
+%     Base case is when $F$ is a literal $x_i$(or $\lnot x_i$),     
+% \end{proof}
+% \begin{lemma}
+%     Let $F$ be a De Morgan formula and $\rho$ be a restriction. 
+%     If $\cdt(F,\rho)$ has \depth $s$, then there exist $s$ variables 
+%     $x_{i_1}, \ldots, x_{i_s}$, $a \in \cube{s}$, a sub-tree $T$ of the formula tree and two restrictions $\alpha_0 = \abra{x_{i_1}\to a_1, \ldots , x_{i_s} \to a_s}$ and $\alpha_1 = \abra{x_{i_1} \to \bar{a_1}, \ldots , x_{i_s} \to \bar{a_s}}$ such that 
+%     \begin{itemize}
+%         \item $T$ has $s$ leaves, which are labelled by $x_{i_1}, \ldots , x_{i_s}$.
+%         \item For each node $v$ in the sub-tree $T$, $F_v|_{\rho \circ \alpha_0} \equiv 0$ and $F_v|_{\rho \circ \alpha_1} \equiv 1$.
+%     \end{itemize}
+    
+            
+% \end{lemma}
+
+%%%%%%%%%%%%%%%OLD NON MONOTONE PROOF%%%%%%%%%%%%%%%%%
+
+% \begin{proof}
+%      The proof of the above lemma is by induction on the formula size of $F$.\\
+%      \textbf{Base case:}
+%         If $F$ is a literal, $x$ (or $\lnot x$), 
+%         the only valid $s$ in such a case is $s = 1$. In such a case the root to leaf path $p$ is the path consisting of the variable $x$ itself. $a = b = 0$.\\
+%         % Then $\alpha= \abra{x \to 0}$ (or $\abra{x \to 1}$)( and $\alpha_1 = \abra{x \to 1}$ or $\abra{x \to 0})$ respectively.\\
+%     \textbf{Induction hypothesis:}
+%         For all formulas $G$ of smaller size, the hypothesis is true. \\
+%     \textbf{Induction step:}
+%         If $F = F_1 \vee F_2$, by the definition of canonical decision tree, there exist non-negative integers $s_1,s_2$ such that $s_1 + s_2 = s$ and $\cdt(F_1,\rho)$ has a path $\alpha$ of length $s_1$ with $F_1|_\alpha \equiv 0$ and $\cdt(F_2,\rho \circ \alpha)$ has a path of length $s_2$.   \\
+%         \textbf{Case 1:} $s_1 =0$ or $s_2 = 0$. If $s_1 = 0$, the proof is done by induction hypothesis since $F_1$ and $F_2$ are strictly smaller formulas. \\
+%         \textbf{Case 2:} $s_1 \neq 0$ and $s_2 \neq 0$.
+%         By induction hypothesis, there exist 
+%         \begin{itemize}
+%             \item variables $x_{i_1}, \ldots , x_{i_{s_1}}$, $a^{(1)} \in \cube{s_1}$, $b^{(1)} \in \cube{s_1}$ and
+%         paths $\calP = \bra{p_1,\ldots , p_{s_1}}$ and in the formula tree $F_1$ such that for all nodes $v \in p_k$, 
+        
+%         $$\alpha^{(1)}_k = \abra{x_{i_1} \to a_1, \ldots x_{i_{k-1}} \to a_{k-1}, x_{i_k} \to b_k^{(1)}, \ldots x_{i_{s_1}} \to b_{s_1}^{(1)} },$$ 
+%         $$\beta^{(1)}_k = \abra{x_{i_1} \to a_1, \ldots x_{i_{k-1}} \to a_{k-1}, x_{i_k} \to \bar{b_k^{(1)}}, \ldots x_{i_{s_1}} \to \bar{b_{s_1}^{(1)}} }$$
+        
+%         $$F_v|_{\rho \circ \alpha_k^{(1)}} \equiv 0$$ and 
+%         $$F_v|_{\rho \circ \beta_k^{(1)}} \equiv 1$$.
+%             \item variables $y_{i_1}, \ldots , y_{i_{s_2}}$, $a^{(2)} \in \cube{s_2}$, $b^{(2)} \in \cube{s_2}$ and
+%         paths $\calQ = \bra{q_1,\ldots , q_{s_2}}$ in the formula tree $F_2$ such that for all $k \in [s_2]$,\\ 
+%         $$\alpha^{(1)} = \abra{x_{i_1} \to a_1, \ldots x_{i_{k-1}} \to a_{k-1}, x_{i_k} \to a_k, \ldots x_{i_{s_1}} \to a_{s_1} }$$, %typo
+        
+%         $$\alpha^{(2)}_k = \abra{y_{i_1} \to a_1^{(2)}, \ldots y_{i_{k-1}} \to a_{k-1}^{(2)}, y_{i_k} \to b_k^{(2)}, \ldots y_{i_{s_2}} \to b_{s_2}^{(2)} }$$, 
+%         $$\beta^{(2)}_k = \abra{y_{i_1} \to a_1^{(2)}, \ldots y_{i_{k-1}} \to a_{k-1}^{(2)}, y_{i_k} \to \bar{b_k^{(2)}}, \ldots y_{i_{s_2}} \to \bar{b_{s_2}^{(2)}} }$$ 
+%         and for all nodes $v \in q_k$, 
+%             $$F_v|_{\rho \circ \alpha^{(1)} \circ \alpha^{(2)}_{k}}  \equiv 0$$ 
+%         and 
+%             $$F_v|_{\rho \circ \alpha^{(1)} \circ \beta^{(2)}_k } \equiv 1 $$.
+%         \end{itemize}
+        
+% %        $\abra{y_{i_1} \to a_1^{(2)}, \ldots ,y_{i_{k-1}} \to a_{k-1}^{(2)}, y_k \to \bar{b_k^{(2)}}, \ldots , y_{i_{s_2}} \to \bar{b_{s_2}^{(2)}}}$
+        
+% %        and paths $\calQ = \bra{q_1,\ldots , q_{s_2}}$ in the formula tree of $F_2$.
+
+%         The $s$ variables of $F$ are $\bra{x_{i_1}, \ldots , x_{i_{s_1}}} \cup \bra{y_{i_1}, \ldots , y_{i_{s_2}}}$.
+%         The $s$ paths in $F$ are the obtained by extending the paths in $\calP$ and $\calQ$ with the root of $F$.
+%         $a = a^{(1)} \circ a^{(2)}$, $b= b^{(1)} \circ b^{(2)}$.
+% %        $\beta_0$, $\beta_1$, $\gamma_0$, $\gamma_1$ and tree $T_1$, $T_2$ for $(F_1,\rho)$ and $(F_2,\rho\circ \alpha)$ respectively. 
+% %        Then define $\alpha_0 = \beta_0 \circ \gamma_0$ and $\alpha_1 = \beta_1 \circ \gamma_1$.
+% %        By induction hypothesis, for all nodes $v$ in $T_1$,
+% %        $F_v|_{\alpha_0} = (F_v|_{\beta_0})|_{\gamma_0} \equiv 0$ and $F_v|_{\alpha_1}= (F_v|_{\beta_1})|_{\gamma_1} \equiv 1$.
+        
+%  %       and for nodes $v$ in $T_2$, 
+%  %       $F_v|\alpha_0 = 0$ and $F_v|\alpha_1 = 1$. $F_1|_{\alpha_0} = F_2|_{\alpha_1}$
+        
+% %        $T$ is the binary tree with $T_1$ and $T_2$ as children.   
+        
+%         The proof is similar if $F = F_1 \wedge F_2$.
+% \end{proof}
+    
+%     Let $\rho_0$ and $\rho_1$ be the inputs which are obtained by setting all the unset variables to $0$ in $\rho \circ \alpha_0$ and $\rho \circ \alpha_1$ respectively. 
+
+%%%%%%%%%%%%%%%OLD NON MONOTONE PROOF%%%%%%%%%%%%%%%%%

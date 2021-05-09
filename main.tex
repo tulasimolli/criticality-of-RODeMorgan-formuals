@@ -1,10 +1,23 @@
 \documentclass{article}
 \usepackage[utf8]{inputenc}
-\usepackage{amsthm,amsmath}
+\usepackage{amsthm,amsmath,amsfonts}
+\usepackage{todonotes,xcolor,hyperref,cleveref}
+\usepackage{nicefrac}
 
+\newcommand{\cdt}{\mathrm{CDT}}
+\newcommand{\prot}{\mathrm{PROT}}
+\newcommand{\kw}{\mathrm{KW}}
+\newcommand{\xvars}{x_{i_1}, \ldots , x_{i_s}}
 
-\title{Criticality of Read Once DeMorgan formuals}
-\author{Tulasi mohan Molli}
+\newcommand{\calP}{\mathcal{P}} 
+\newcommand{\calQ}{\mathcal{Q}}
+
+\newcommand{\depth}{depth}
+
+\newcommand{\tulasi}[1]{{\color{teal} [{\bf Tulasi:} #1]}}
+
+\title{Criticality of monotone De Morgan formulas}
+\author{Tulasimohan Molli}
 \date{October 2020}
 
 \input{gen_macros.tex}
@@ -12,19 +25,253 @@
 
 \begin{document}
 
-\maketitle
+\maketitle    
+    \begin{theorem}
+    \label{thm:main theorem}
+    Let $s$ be a natural number. Let $F$ be a monotone De-Morgan formula with $L(F)$ leaves. Then 
+    \[
+        \prob{\rho}{\cdt(F,\rho) \text{ has \depth\ } \geq s} \leq (16p\sqrt{L(F)})^s
+    \]
+\end{theorem}
 
-\section{Canonical Decision tree}
+\section{Introduction}
+\subsection{Decision trees}
+    Query algorithms and decision tree. 
+    A decision tree is a binary tree which is a representation of a non-adaptive query algorithm. 
+
+\begin{definition}
+    A decision tree is a binary tree where the nodes are labelled by variables, edges are labelled by 0 or 1 and leaves are labelled by 0 or 1.    
+\end{definition}
+    We refer to paths in a decision tree as \emph{branches}.
+    Each branch corresponds to an ordered partial assignment of input variables.
+    We use $\abra{x_{i_1} \to a_1, \ldots , x_{i_s} \to a_s}$ to represent the branch whose nodes are labelled by $x_{i_1}, \ldots ,x_{i_s}$ and the edges are labelled by $a_1, \ldots , a_s$ in that order.     
+%    We refer to concatination of branches in a tree as a \emph{graft}.
+
+    Decision trees compute boolean functions in a natural way. 
+    A decision trees $T$ computes a boolean function $F$ is at all the root to leaf branches the function becomes a constant and the value of the function is given by the label at the leaf.  
     
-    \begin{definition}[CDT]
-        Semantic decision tree and balance. Define decision trees as a collection of bracnches like Rossman.    
-    \end{definition}
+%    If a branch sets the function to 0, we call it a 0-branch certificate (similarly for 1-branch certificate).
+%    If a concatination of branches of the decision tree sets the function to 0, we call it a 0-graft certificate (similarly for 1-graft certificate). 
+       
+\section{Canonical Decision tree:}    
+    Given a De-Morgan formula $F$ and a restriction $\rho$, we define the canonical decision tree of $F$ w.r.t. the restriction $\rho$ denoted by $\cdt(F,\rho)$ as follows
+    \begin{definition}[$\cdt(F,\rho)$:]
+        The canonical decision tree is defined inductively as follows:
+        \begin{itemize}
+            \item If $F|_\rho$ is a constant 0 or 1, then $\cdt(F,\rho)$ is a single node labelled appropriately by that constant.
+            \item If $F$ is a literal $x_i$ (or $\lnot x_i$), then $\cdt(F,\rho)$ consists of a node labelled by $x_i$  with two children which are labelled by 0 and 1.
+            \item If $F = F_1 \vee F_2$:
+                \begin{itemize}
+                    \item If $F_1|_\rho$ is non-constant,
+                    %
+                    $\cdt(F,\rho)$ is the set of ordered restrictions $\abra{v_1 \to a_1, \dots ,v_u \to a_u}$ of length $u \geq 1$ such that 
+%                    construct $\cdt(F_1,\rho)$. For each leaf $\alpha$ in $\cdt(F_1,\rho)$ labelled $0$, attach $\cdt(F_2, \rho \circ \alpha)$.     
+                    there exists $t \in [u]$ and $b \in \cube{t}$satisfying 
+                    \begin{itemize}
+                        \item $\abra{v_1 \to b_1,\dots ,v_t \to b_t} \in \cdt(F_1,\rho)$,
+                        \item $\abra{v_{t+1} \to a_{t+1}, \dots , v_u \to a_u} \in \cdt(F_2, \rho\circ \abra{v_1 \to a_1, \dots , v_t\to a_t})$, and 
+                        \item for all $i \in [t]$,
+                        $$b_i = \begin{cases}
+                                a_i & if F_1|_{\rho}|_{\abra{v_1 \to b_1, \dots v_{i-1} \to b_{i-1},v_i \to a_i}} \not\equiv 0\\
+                                1-a_i & if F_1|_{\rho}|_{\abra{v_1 \to b_1, \dots v_{i-1} \to b_{i-1},v_i \to a_i}} \equiv 0,
+                        \end{cases}
+                        $$
+                    \end{itemize}
+                    \item If $F_1|_\rho \equiv 0$ output $\cdt(F_2,\rho)$.  
+                \end{itemize}             
+            \item In the case of $F = F_1 \wedge F_2$,  $\cdt(F,\rho)$ is defined similar to the $F= F_1 \vee F_2$ case with the roles of 0 and 1 interchanged. 
+        \end{itemize}    
+    \end{definition}   
 
-    \begin{observation}
-        For $a \in \cube{}$ For every $a$-path in the Canonical Decision Tree, there is a corresponding $(1-a)$-path which has same set of variables. 
-    \end{observation}
+
+    \begin{claim}[Unpacking]
+    \label{claim:unpacking}
+        Let $F = F_1 \vee F_2$ be a monotone De Morgan formula.
+        Let $u \geq 1$, $a \in \cube{u}$ and  $(x_{i_1} \to a_1, \ldots , x_{i_u} \to a_u)$ be an ordered restriction.
+        If $\cdt(F,\rho)$ has the path $(x_{i_1} \to a_1, \ldots , x_{i_u} \to a_u)$, then either       
+%        of length $u \geq 1$ 
+%        then there exist variables
+%        $v_1,\ldots , v_u$ and an assignment such that such that
+%        either         
+    \begin{itemize}
+        \item $F_1|_{\rho} \equiv 0$ and $\cdt(F_2,\rho)$ has the path $(x_{i_1} \to a_1, \ldots , x_{i_u} \to a_u)$,     
+        or 
+        \item there exists $t \in [u]$, $b \in \cube{t}$ such that 
+        \begin{itemize}
+            \item $F_1|_{\rho \circ (v_1 \to a_1, \dots , v_t \to a_t)} = 0$,
+            \item $F_1|_{\rho \circ (v_1 \to b_1, \dots , v_t \to b_t)} = 1$,
+            \item $(v_1 \to b_1, \dots , v_t \to b_t)$ is a path in $\cdt(F_1,\rho)$,
+            \item $(v_{t+1} \to a_{t+1}, \dots , v_u \to a_u)$ is a path in $\cdt(F,\rho \circ (v_1 \to a_1, \dots , v_t \to a_t))$.
+        \end{itemize}
+    \end{itemize}
+    \tulasi{need to explain why F1 is 1 on the b assignment} 
+    \end{claim}
+
+\section{Structural Lemma}
 
 
 
+\begin{lemma}
+    \label{lem:structural lemma}
+    Let $F$ be a monotone De Morgan formula and $\rho$ be a restriction. Let $u$ be a natural number such that $\cdt(F,\rho)$ has a path of length $u$ given by $(x_{i_1} \to a_1, \dots , x_{i_u} \to a_u)$. Then, there exist
+    $u$ root to leaf paths $p_1, \ldots , p_u$ in the formula tree $F$ whose leaves are labelled by $\xvars$ respectively. 
+    
+    Assignments $\rho_0$ and $\rho_1$ such that 
+    $\rho_0 := \rho \circ \abra{i_1 \to 0, \dots , i_u \to 0}$
+    and
+    $\rho_1 := \rho \circ \abra{i_1 \to 1, \dots , i_u \to 1}$
+    there exist $s$ variables $x_{i_1},\cdots ,x_{i_u}$ and leaves $\ell_1, \ldots, \ell_s$ such that 
+    \begin{itemize}
+        \item $G|_{\rho_0} \equiv 0$ and $G_{\rho_1} \equiv 1$ for all nodes $G$ in $p_1 \cup \dots \cup p_u$. 
+    \end{itemize}
+\end{lemma}    
 
+%unpacking => Strucutal lemma
+\begin{proof}
+    The proof is by induction on the size of the formula $F$, 
+    Consider the case when $F = F_1 \vee F_2$. The case when $F = F_1 \wedge F_2$ can be handled similarly.\tulasi{elaborate}
+    Suppose $\cdt(F,\rho)$ has of path of length $u$ given by $(i_1 \to a_1, \ldots ,i_u \to a_u)$, by~\cref{claim:unpacking}, 
+    \begin{itemize}
+        \item[Case 1:] If $F_1|_\rho \equiv 0$ and $\cdt(F_2,\rho)$ has the path $(i_1 \to a_1, \dots ,i_u \to a_u)$.\\
+        Since $F_2$ is a smaller formula than $F$, by induction hypothesis. $F_2$ has $u$ paths which satisfy the required conditions and we are done. 
+        \item[Case 2:] there exists $t \in [u]$ and $b \in \cube{t}$ such that 
+        $(i_1 \to a_1, \dots , i_t \to a_t)$ is a path in $\cdt(F_1,\rho)$ and $(i_{t+1} \to a_{t+1}, \dots ,i_u \to a_u)$ is a path in $\cdt(F_2, \rho \circ (i_1 \to a_1, \dots , i_t \to a_t))$.
+        
+        Therefore, by induction hypothesis there exists $t$ paths $p_{1,1}, \dots , p_{1,t}$ in $F_1$ labelled by $x_{i_1}, \dots , x_{i_t}$ and $u-t$ paths in $p_{2,1}, \dots , p_{2,u-t}$ in $F_2$ labelled $x_{i_{t+1}}, \dots , x_{i_u}$ which satisfy the required properties.
+        
+        Let $p_1, \dots , p_u$ be paths in $F$ which are obtained by extending each of the above paths with the root node of $F$.
+        
+        Let's check $p_1, \dots , p_u$ satisfy the required properties.
+        
+        Let $G \in \calP := p_1 \cup \dots \cup p_u$. We have the following three cases
+        
+        \begin{itemize}
+            \item [$\bf{G \in F_1}$:] let $\rho^1_0 := \rho \circ (i_1 \to 0, \dots , i_t \to 0)$ and $\rho^1_1 := \rho \circ (i_1 \to 1, \dots , i_t \to 1)$. 
+            By induction hypothesis, 
+            for all $G \in F_1 \cap \calP$, $G|_{\rho^1_0} \equiv 0$ and 
+            $G|_{\rho^1_1} \equiv 1$.
+            Since $\rho_0$ and $\rho_1$ are extensions of $\rho^1_0$ and $\rho^1_1$ respectively, 
+            $G|_{\rho_0} \equiv 0$ and $G|_{\rho_1} \equiv 1$.
+            \item [$\bf{G \in F_2}$:]
+                let $\rho^2_0 := \rho \circ (i_1 \to a_1, \dots , i_t \to a_t, i_{t+1} \to 0, \dots ,i_u \to 0)$ and $\rho^2_1 := \rho \circ (i_1 \to a_1, \dots , i_t \to a_t, i_{t+1 }\to 1, \dots i_u \to 1)$. 
+                By induction hypothesis, 
+            for all $G \in F_2 \cap \calP$, $G|_{\rho^2_0} \equiv 0$ and $G|_{\rho^2_1} \equiv 1$.
+            Since $G$ is a monotone formula and $\rho_0 \leq \rho^2_0$ and $\rho_1 \geq \rho^2_1$, therefore
+            $G|_{\rho_0} \equiv 0$ and $G|_{\rho_1} \equiv 1$.
+            \item [$\bf{G = F}$:]
+                
+        \end{itemize}
+        
+
+
+    \end{itemize}
+    
+    
+\end{proof}
+
+
+
+\section{KW game and a Protocol}
+    \paragraph{Game:} 
+    Given a boolean function $F$, we consider a variant of the Karchmer-Wigderson game denoted by $\kw_F$. The game involves two players Alice and Bob.  
+    Alice gets an input $x \in F^{-1}(0)$ and Bob gets $y \in F^{-1}(1)$. Their goal is output the indices of all coordinates where $x$ and $y$ differ.
+    
+\subsection{Protocol}
+    \begin{lemma}
+        Let $F$ be a monotone De-Morgan formula with $L(F)$ leaves.  
+    \end{lemma}
+
+%    Alice gets the input $\rho_0 = \rho \circ \abra{x_{i_1} \to b_1, \ldots x_{i_s} \to b_s}$ and Bob gets the input $\rho_1 = \rho \circ \abra{x_{i_1} \to \bar{b_1}, \ldots , x_{i_s} \to \bar{b_s}}$.
+    Alice gets the input $\rho_0 = \rho \circ \abra{x_{i_1} \to 0, \ldots x_{i_s} \to 0}$ and Bob gets the input $\rho_1 = \rho \circ \abra{x_{i_1} \to 1, \ldots , x_{i_s} \to 1}$.
+    Alice and Bob go through all possible runs of the KW protocol. 
+
+%%%%%%%
+    % The protocol proceeds in $s$ rounds. For $k \in [s]$, in the $k^{th}$ round, Alice and Bob recover the $i^{th}$ variable in the long path in the following way: 
+    
+    % They run KW protocol by picking the left child when ever they have a choice on the inputs $\rho\circ \abra{x_{i_1} \to a_1, \ldots x_{i_{k-1}} \to a_{k-1}, x_{i_k} \to b_k, \ldots , x_{i_{s}} \to b_{s}}$ and $\rho\circ \abra{x_{i_1} \to a_1, \ldots x_{i_{k-1}} \to a_{k-1}, x_{i_k} \to \bar{b_k}, \ldots , x_{i_{s}} \to \bar{b_{s}}}$. 
+%%%%%%%    
+    
+
+    % Let $\prot(F,\rho_0,\rho_1)$ denote the protocol for $F$ when Alice and Bob get inputs $\rho_0$ and $\rho_1$ respectively. 
+    
+    % They run the following protocol $\prot(F,\rho_0,\rho_1)$
+
+    % $\prot(F,\rho_0,\rho_1)$:\\
+    %     If $F(\rho_0) = F(\rho_1):$ \\
+    %         output $\bra{}$, 
+
+    %     else if $F$ is a literal $x_i$ or $\lnot x_i$:\\
+    %         output $\bra{i}$
+            
+    %     else if $(0= F_1(\rho_0) \neq F_1(\rho_0) = 1)$:\\
+    %         output $\prot(F_1,\rho_0,\rho_1) \cup\prot(F_2,\rho_0,\rho_1)$,
+        
+    %     else return $\bot$.     
+        
+    % Let $\rho_0 := \rho \circ \alpha_0$  and $\rho_1 := \rho \circ \alpha _1$.       
+
+\begin{claim}
+    \label{claim:no. of transcripts}
+    The number of transcripts of the above protocol is at most $L(F)^s$, and in fact at most $\binom{L(f)}{s}$.
+\end{claim}
+
+\newcommand{\kwleft}{\text{KWleft}}
+          
+\section{Proof of Theorem~\ref{thm:main theorem}}
+\begin{proof}
+    Consider the event that $\cdt(F,\rho)$ has a path of length $s$. By Lemma~\ref{lem:structural lemma}, there exist $s$ variables $\xvars$, and two assignments $a,b \in \cube{s}$ and a transcript $\pi$ of the protocol $\kwleft$ such that $\prot(F,a,\rho \circ \alpha_k, \rho \circ \beta_k) = \pi$. 
+    \begin{align*}
+        &\prob{\rho}{\cdt(F,\rho) \text{ has \depth } s}\\
+            &\leq \sum_{\xvars} \sum_{a \in \cube{s}} \sum_{b \in \cube{s}} \sum_{\pi} \prob{\rho}{\prot(F,a,\rho_0,\rho_1) = \pi}\\
+        & \text{ where }\rho_0 = \rho \circ \abra{x_{i_1} \to b_1, \ldots , x_{i_s} \to b_s} \text{ and }
+        \rho_1 = \rho \circ \abra{x_{i_1} \to \bar{b_1}, \ldots , x_{i_s} \to \bar{b_s}}\\        
+        &\leq 2^{2s} \max_{a^*,b^*}\sum_{\xvars} \sum_{\pi} \sum_{\rho\colon \prot(F,\rho_0,\rho_1) = \pi} \prob{}{\rho}\\
+        &= \cbra{\frac{8p}{1-p}}^s \cdot \sum_{\xvars} \sum_{\pi} \sum_{\rho\colon \prot(F,\rho_0,\rho_1) = \pi} \sqrt{\prob{}{\rho_0}} \sqrt{\prob{}{\rho_1}}\\
+        &= (16p)^s \cdot \sum_{\xvars} \sum_{\pi}  \sqrt{\sum_{\rho:\prot(F,\rho_0,\rho_1) = \pi} \prob{}{\rho_0}} \sqrt{\sum_{\rho:\prot(F,\rho_0,\rho_1) = \pi} \prob{}{\rho_1}} \tag*{since p $\leq$ 1/2.}\\
+        &= (16p)^s \sum_{\xvars} \sum_{\pi} \sqrt{\prob{}{A_{\pi}}} \sqrt{\prob{}{B_{\pi}}}\\
+        &\leq (16p)^s   \sqrt{\sum_{\xvars} \sum_{\pi} 1} \sqrt{\sum_{\xvars} \sum_{\pi} \prob{}{A_\pi}\prob{}{B_\pi}}\\
+        &\leq (16p)^s\sqrt{\# \pi} \tag{by Claim~\ref{claim:sum of rectangles}}\\
+        &\leq (16p)^s \sqrt{L(F)^s} \tag{by Claim~\ref{claim:no. of transcripts}}
+    \end{align*}
+    where $\prob{}{A_\pi} := \sum_{\rho:\prot(F,\rho_0,\rho_1) = \pi} \prob{}{\rho_0}$ and  $\prob{}{B_\pi} := \sum_{\rho:\prot(F,\rho_0,\rho_1) = \pi} \prob{}{\rho_1}$.
+\end{proof}
+
+    \begin{claim}
+    \label{claim:sum of rectangles}
+        $$\sum_{\xvars} \sum_{\pi} \prob{}{A_\pi}\prob{}{B_\pi} \leq 1$$
+    \end{claim}
+%\newcommand{\maj}{Maj}
+\newcommand{\corr}{Corr}
+\newcommand{\f}{\maj}
+\newcommand{\g}{C}
+
+\section{Correlation of Majority with monotone De-Morgan formulas}
+    \begin{theorem}
+    \label{thm:corr with maj}
+        Let $\maj$ be the majority function on $n$ bits. 
+        Let $C$ be any De-Morgan formula with $L$ leaves. Then,
+        $$\prob{x}{\maj(x) = C(x)} \leq \frac12 + $$
+    \end{theorem}
+
+    \begin{proof}
+        Let $E_1$ be the event that $\cdt(F,\rho)$ has depth $\leq t$, $E_2$ be the event that $|stars(r)| \geq pn/2$, $E_3$ be the event that $bias(\rho) \leq n/100$.
+        \begin{align*}
+            \prob{x}{\f(x),\g(x)} &
+                        = \prob{\rho \sim R_p}{\prob{z \sim \fcube{stars(\rho)}}{\f|_{\rho}(z) = \g|_{\rho}(z)}} \\
+                        &= \prob{\rho \sim R_p}{\prob{z \sim \fcube{stars(\rho)}}
+                        {\f|_\rho(z) = \g|_\rho(z) \wedge (E_1 \wedge E_2 \wedge E_3(\rho))}}\\
+                        &\hspace{10pt}+ \prob{\rho \sim R_p}{ \prob{z \sim \fcube{stars(\rho)}}
+                        {\f(z)|_\rho = \g|_\rho(z) \wedge  (\bar{E_1} \vee \bar{E_2} \vee \bar{E_3}(\rho))}}\\
+                        &\leq  \prob{z \sim \fcube{stars(\rho)}}{\f|_\rho(z)\cdot \g|_\rho(z)| E_1 \wedge E_2 \wedge E_3} + \prob{\rho}{\bar{E_1} \vee \bar{E_2} \vee \bar{E_3}}
+        \end{align*}
+    \end{proof}
+    
+    
+    
+\tulasi{Correlation of Majority with small depth decision trees.}
+\begin{claim}
+    Let $T$ be a decision tree of depth $d$. 
+        $$Corr(T,\maj_n) \leq \frac{1}{2^{n-d}}\sum_{j=0}^{n/2 -d} \binom{n-d}{j}$$
+\end{claim}
+\tulasi{bound chrenoff events.}
 \end{document}
