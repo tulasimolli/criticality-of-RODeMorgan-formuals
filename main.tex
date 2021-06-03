@@ -254,7 +254,7 @@
     \end{theorem}
 
     \begin{proof}
-        Let $E_1$ be the event that $\cdt(F,\rho)$ has depth $\leq t$, $E_2$ be the event that $|stars(r)| \geq pn/2$, $E_3$ be the event that $bias(\rho) \leq n/100$.
+        Let $E_1$ be the event that $\cdt(F,\rho)$ has depth $\leq \log n$, $E_2$ be the event that $|stars(r)| \geq pn/2$, $E_3$ be the event that $bias(\rho) \leq \sqrt{n \log n}$.
         \begin{align*}
             \prob{x}{\f(x),\g(x)} &
                         = \prob{\rho \sim R_p}{\prob{z \sim \fcube{stars(\rho)}}{\f|_{\rho}(z) = \g|_{\rho}(z)}} \\
@@ -274,4 +274,13 @@
         $$Corr(T,\maj_n) \leq \frac{1}{2^{n-d}}\sum_{j=0}^{n/2 -d} \binom{n-d}{j}$$
 \end{claim}
 \tulasi{bound chrenoff events.}
+
+By Chernoff bounds, $\prob{}{bias(\rho) \geq \sqrt{n \log n}} \leq \frac1n$. 
+
+By Chernoff bounds, $\prob{}{stars(\rho) \leq pn/2} \leq e^{-pn/6}$.
+
+By Switching lemma for monotone De-Morgan formulas 
+$\prob{}{E_1} \leq (p\sqrt{L})^{\log n} \leq \frac1n$.
+
+    $$ \frac12 - \frac{\log {pn}}{\sqrt{pn}}\leq \prob{\rho,z}{\maj|_\rho(z) = C|_\rho(z)|E_1 \wedge E_2 \wedge E_3} \leq \frac12 + \frac{\log pn}{\sqrt{pn}}$$
 \end{document}
